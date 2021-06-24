@@ -1,13 +1,14 @@
 # clean-code-ruby
+*Esta es una traducción libre al español de [clean-code-ruby](https://github.com/uohzxela/clean-code-ruby) y puede estar sujeta a errores. Los códigos de ejemplo no serán modificados para evitar incosistencias con el material original.*
 
-Clean Code concepts adapted for Ruby.
+Conceptos de Clean Code (Código Limpio) adaptados para Ruby.
 
-Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript).
+Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript).
 
-*Note: The examples are largely ported over from JavaScript so they may not be idiomatic. Feel free to point out any non-idiomatic Ruby code by submitting an issue and I'll correct it right away. Also, pull requests are always welcome!*
+*Nota: Los ejemplos han sido traídos en su mayoría de JavaScript y pueden no ser idiomáticos. Siéntase libre de señalar cualquier código no idiomático de Ruby creando un issue o enviando un pull request. Todas las contribuciones son bienvenidas!*
 
-## Table of Contents
-  1. [Introduction](#introduction)
+## Tabla de contenido
+  1. [Introducción](#Introducción)
   2. [Variables](#variables)
   3. [Methods](#methods)
   4. [Objects and Data Structures](#objects-and-data-structures)
@@ -19,25 +20,24 @@ Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-
   11. [Comments](#comments)
   12. [Translations](#translations)
 
-## Introduction
+## Introducción
 ![Humorous image of software quality estimation as a count of how many expletives
 you shout when reading code](http://www.osnews.com/images/comics/wtfm.jpg)
 
-Software engineering principles, from Robert C. Martin's book
+Los Principios de la Ingeniería de Software, del libro de Robert C. Martin
 [*Clean Code*](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882),
-adapted for Ruby. This is not a style guide. It's a guide to producing
-[readable, reusable, and refactorable](https://github.com/ryanmcdermott/3rs-of-software-architecture) software in Ruby.
+adaptados para Ruby. Esta no es una guía de estilo. Es una guía para producir software 
+[legible, reusable, y refactorizable](https://github.com/ryanmcdermott/3rs-of-software-architecture) en Ruby.
 
-Not every principle herein has to be strictly followed, and even fewer will be
-universally agreed upon. These are guidelines and nothing more, but they are
-ones codified over many years of collective experience by the authors of
-*Clean Code*.
+Los principios aquí presentados no deben ser seguidos de manera estricta, y aún menos
+ejemplos son universalmente aceptados. Son simplemente pautas, pero que han sido creadas durante 
+los muchos años de experiencia colectiva de los autores de *Código Limpio*.
 
-Our craft of software engineering is just a bit over 50 years old, and we are
-still learning a lot. When software architecture is as old as architecture
-itself, maybe then we will have harder rules to follow. For now, let these
-guidelines serve as a touchstone by which to assess the quality of the
-Ruby code that you and your team produce.
+Nuestro oficio en la Ingeniería de Software tiene sólo un poco más de 50 años y
+todavía seguimos aprendiendo mucho. Cuando la arquitectura de software es tan
+vieja como la rquitectura misma, tendremos reglas muy difíciles de seguir. Por el momento,
+dejemos que estas guías sirvan como pauta para que usted y su equipo evalúen la
+calidad del código que producen.
 
 One more thing: knowing these won't immediately make you a better software
 developer, and working with them for many years doesn't mean you won't make
@@ -46,25 +46,32 @@ shaped into its final form. Finally, we chisel away the imperfections when
 we review it with our peers. Don't beat yourself up for first drafts that need
 improvement. Beat up the code instead!
 
-## **Variables**
-### Use meaningful and pronounceable variable names
+Una cosa más: saber estas pautas no lo hará inmediatamente un mejor desarrollador
+de software, y trabajar con ellas durante muchos años no significa que no cometerá errores.
+Cada pieza de código empieza como un borrador, así como la arcilla siendo amazada hasta 
+su forma final. Finalmente pulimos cualquier imperfección cuando lo revisamos con
+nuestros pares. No se castigue por sus primeros borradores que necesitan mejoras.
+Castigue al código en su lugar!
 
-**Bad:**
+## **Variables**
+### Usa nombres de variables pronunciables y con significado 
+
+**Mal:**
 ```ruby
 yyyymmdstr = Time.now.strftime('%Y/%m/%d')
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 current_date = Time.now.strftime('%Y/%m/%d')
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
-### Use the same vocabulary for the same type of variable
+### Usa el mismo vocabulario para el mismo tipo de variable
 
-Pick one word for the concept and stick to it.
+Elige un concepto y mantente con él.
 
-**Bad:**
+**Mal:**
 ```ruby
 user_info
 user_data
@@ -75,62 +82,63 @@ start_at
 start_time
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 user
 
 starts_at
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
-### Use searchable names and use constants
-We will read more code than we will ever write. It's important that the code we
-do write is readable and searchable. By *not* naming variables that end up
-being meaningful for understanding our program, we hurt our readers.
-Make your names searchable.
+### Usa constantes y nombres que puedas buscar
 
-Also, instead of hardcoding values and using "magic numbers", create constants.
+Leeremos más código que el que alguna vez escribiremos. Es importante que el código
+que escribamos sea legible y se pueda buscar.
+Herimos a nuestors lectores al **no** nombrar variables que sean significativas para
+entender nuestro programa. Crea variables que puedas buscar.
 
-**Bad:**
+Tambien, crea constantes en lugar de *hardcodear* valores y crear "números mágicos".
+
+**Mal:**
 ```ruby
-# What the heck is 86400 for?
+# Qué demonios es 86_400?
 status = Timeout::timeout(86_400) do
   # ...
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
-# Declare them as capitalized globals.
+# Declárala como una constante.
 SECONDS_IN_A_DAY = 86_400
 
 status = Timeout::timeout(SECONDS_IN_A_DAY) do
   # ...
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
-### Use explanatory variables
-**Bad:**
+### Usa variables explicativas
+**Mal:**
 ```ruby
 address = 'One Infinite Loop, Cupertino 95014'
 city_zip_code_regex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/
 save_city_zip_code(city_zip_code_regex.match(address)[1], city_zip_code_regex.match(address)[2])
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 address = 'One Infinite Loop, Cupertino 95014'
 city_zip_code_regex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/
 _, city, zip_code = city_zip_code_regex.match(address).to_a
 save_city_zip_code(city, zip_code)
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
-### Avoid Mental Mapping
-Explicit is better than implicit.
+### Evita el mapeo mental
+Explícito es mejor que implícito.
 
-**Bad:**
+**Mal:**
 ```ruby
 locations = ['Austin', 'New York', 'San Francisco']
 locations.each do |l|
@@ -139,12 +147,12 @@ locations.each do |l|
   # ...
   # ...
   # ...
-  # Wait, what is `l` for again?
+  # Espera, para qué es 'l'?
   dispatch(l)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 locations = ['Austin', 'New York', 'San Francisco']
 locations.each do |location|
@@ -156,13 +164,12 @@ locations.each do |location|
   dispatch(location)
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
-### Don't add unneeded context
-If your class/object name tells you something, don't repeat that in your
-variable name.
+### No agregues contexto innecesario
+Si el nombre de tu clase/objeto te dice algo, no repitas el nombre en tu variable.
 
-**Bad:**
+**Mal:**
 ```ruby
 car = {
   car_make: 'Honda',
@@ -175,7 +182,7 @@ def paint_car(car)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 car = {
   make: 'Honda',
@@ -187,12 +194,15 @@ def paint_car(car)
   car[:color] = 'Red'
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
-### Use default arguments instead of short circuiting or conditionals
-Default arguments are often cleaner than short circuiting. Be aware that if you use them, your method will only provide default values for undefined arguments. Other "falsy" values such as `false` and `nil` will not be replaced by a default value.
+### Usa argumentos por defecto en lugar de evaluaciones de cortocircuito
+Los argumentos por defecto son por lo general más limpios que las [evaluaciones de cortocircuito](https://es.wikipedia.org/wiki/Evaluación_de_cortocircuito).
+Sé consciente de que tu método sólo proveerá valores por defecto para argumentos indefinidos si las usas.
+Otros valores "falsy" como `false` y `nil` no serán reempalzados por un valor por defecto.
 
-**Bad:**
+
+**Mal:**
 ```ruby
 def create_micro_brewery(name)
   brewery_name = name || 'Hipster Brew Co.'
@@ -200,13 +210,13 @@ def create_micro_brewery(name)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def create_micro_brewery(brewery_name = 'Hipster Brew Co.')
   # ...
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## **Methods**
 ### Method arguments (2 or fewer ideally)
@@ -231,14 +241,14 @@ To make it obvious what properties the method expects, you can use the keyword a
 properties are being used.
 2. If a required keyword argument is missing, Ruby will raise a useful `ArgumentError` that tells us which required argument we must include.
 
-**Bad:**
+**Mal:**
 ```ruby
 def create_menu(title, body)
   # ...
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def create_menu(title:, body:)
   # ...
@@ -246,7 +256,7 @@ end
 
 create_menu(title: 'Foo', body: 'Bar')
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 
 ### Methods should do one thing
@@ -256,7 +266,7 @@ When you can isolate a method to just one action, they can be refactored
 easily and your code will read much cleaner. If you take nothing else away from
 this guide other than this, you'll be ahead of many developers.
 
-**Bad:**
+**Mal:**
 ```ruby
 def email_clients(clients)
   clients.each do |client|
@@ -268,7 +278,7 @@ end
 email_clients(clients)
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def email_clients(clients)
   clients.each { |client| email(client) }
@@ -285,13 +295,13 @@ end
 
 email_clients(active(clients))
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Method names should say what they do
 Poorly named methods add to the code reviewer's cognitive load at best, and mislead the
 code reviewer at worst. Strive to capture the precise intent when naming methods.
 
-**Bad:**
+**Mal:**
 ```ruby
 def add_to_date(date, month)
   # ...
@@ -303,7 +313,7 @@ date = DateTime.now
 add_to_date(date, 1)
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def add_month_to_date(date, month)
   # ...
@@ -312,14 +322,14 @@ end
 date = DateTime.now
 add_month_to_date(date, 1)
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Methods should only be one level of abstraction
 When you have more than one level of abstraction your method is usually
 doing too much. Splitting up methods leads to reusability and easier
 testing. Furthermore, methods should descend by the level of abstraction: one very abstract method should call methods that are less abstract and so on.
 
-**Bad:**
+**Mal:**
 ```ruby
 def interpret(code)
   regexes = [
@@ -343,7 +353,7 @@ def interpret(code)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def interpret(code)
   tokens = tokenize(code)
@@ -376,7 +386,7 @@ def parse(ast)
   end
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Remove duplicate code
 Do your absolute best to avoid duplicate code. Duplicate code is bad because it
@@ -400,7 +410,7 @@ worse than duplicate code, so be careful! Having said this, if you can make
 a good abstraction, do it! Don't repeat yourself, otherwise you'll find yourself
 updating multiple places anytime you want to change one thing.
 
-**Bad:**
+**Mal:**
 ```ruby
 def show_developer_list(developers)
   developers.each do |developer|
@@ -427,7 +437,7 @@ def show_manager_list(managers)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def show_employee_list(employees)
   employees.each do |employee|
@@ -454,12 +464,12 @@ def position_specific_data(employee)
   end
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Don't use flags as method parameters
 Flags tell your user that this method does more than one thing. Methods should do one thing. Split out your methods if they are following different code paths based on a boolean.
 
-**Bad:**
+**Mal:**
 ```ruby
 def create_file(name, temp)
   if temp
@@ -470,7 +480,7 @@ def create_file(name, temp)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def create_file(name)
   fs.create(name)
@@ -480,7 +490,7 @@ def create_temp_file(name)
   create_file("./temp/#{name}")
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Avoid Side Effects (part 1)
 A method produces side effects if it does anything more than take values and/or
@@ -498,7 +508,7 @@ without any structure, using mutable data types that can be written to by anythi
 and not centralizing where your side effects occur. If you can do this, you will
 be happier than the vast majority of other programmers.
 
-**Bad:**
+**Mal:**
 ```ruby
 # Global variable referenced by following method.
 # If we had another method that used this name, now it'd be an array and it could break it.
@@ -513,7 +523,7 @@ split_into_first_and_last_name()
 puts $name # ['Ryan', 'McDermott']
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def split_into_first_and_last_name(name)
   name.split(' ')
@@ -525,7 +535,7 @@ first_and_last_name = split_into_first_and_last_name(name)
 puts name # 'Ryan McDermott'
 puts first_and_last_name # ['Ryan', 'McDermott']
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Avoid Side Effects (part 2)
 In Ruby, everything is an object and everything is passed by value, but these values are references to objects. In the case of objects and arrays, if your method makes a change
@@ -559,27 +569,27 @@ this isn't a big issue in practice because there are
 this kind of programming approach to be fast and not as memory intensive as
 it would be for you to manually clone objects and arrays.
 
-**Bad:**
+**Mal:**
 ```ruby
 def add_item_to_cart(cart, item)
   cart.push(item: item, time: Time.now)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def add_item_to_cart(cart, item)
   cart + [{ item: item, time: Time.now }]
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Favor functional programming over imperative programming
 Ruby isn't a functional language in the way that Haskell is, but it has
 a functional flavor to it. Functional languages are cleaner and easier to test.
 Favor this style of programming when you can.
 
-**Bad:**
+**Mal:**
 ```ruby
 programmer_output = [
   {
@@ -604,7 +614,7 @@ programmer_output.each do |output|
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 programmer_output = [
   {
@@ -626,18 +636,18 @@ INITIAL_VALUE = 0
 
 total_output = programmer_output.sum(INITIAL_VALUE) { |output| output[:lines_of_code] }
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Encapsulate conditionals
 
-**Bad:**
+**Mal:**
 ```ruby
 if params[:message].present? && params[:recipient].present?
   # ...
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def send_message?(params)
   params[:message].present? && params[:recipient].present?
@@ -647,18 +657,18 @@ if send_message?(params)
   # ...
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Avoid negative conditionals
 
-**Bad:**
+**Mal:**
 ```ruby
 if !genres.blank?
   # ...
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 unless genres.blank?
   # ...
@@ -670,7 +680,7 @@ if genres.present?
   # ...
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Avoid conditionals
 This seems like an impossible task. Upon first hearing this, most people say,
@@ -682,7 +692,7 @@ one thing. When you have classes and methods that have `if` statements, you
 are telling your user that your method does more than one thing. Remember,
 just do one thing.
 
-**Bad:**
+**Mal:**
 ```ruby
 class Airplane
   # ...
@@ -699,7 +709,7 @@ class Airplane
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class Airplane
   # ...
@@ -726,7 +736,7 @@ class Cessna < Airplane
   end
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Avoid type-checking (part 1)
 Ruby is dynamically typed, which means your methods can take any type of argument.
@@ -734,7 +744,7 @@ Sometimes you are bitten by this freedom and it becomes tempting to do
 type-checking in your methods. There are many ways to avoid having to do this.
 The first thing to consider is consistent APIs.
 
-**Bad:**
+**Mal:**
 ```ruby
 def travel_to_texas(vehicle)
   if vehicle.is_a?(Bicycle)
@@ -745,13 +755,13 @@ def travel_to_texas(vehicle)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def travel_to_texas(vehicle)
   vehicle.move(@current_location, Location.new('texas'))
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Avoid type-checking (part 2)
 If you are working with basic values like strings and integers,
@@ -761,7 +771,7 @@ doing it well requires so much extra verbiage that the faux "type-safety" you ge
 doesn't make up for the lost readability. Keep your Ruby clean, write
 good tests, and have good code reviews.
 
-**Bad:**
+**Mal:**
 ```ruby
 def combine(val1, val2)
   if (val1.is_a?(Numeric) && val2.is_a?(Numeric)) ||
@@ -773,20 +783,20 @@ def combine(val1, val2)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def combine(val1, val2)
   val1 + val2
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Remove dead code
 Dead code is just as bad as duplicate code. There's no reason to keep it in
 your codebase. If it's not being called, get rid of it! It will still be safe
 in your version history if you still need it.
 
-**Bad:**
+**Mal:**
 ```ruby
 def old_request_module(url)
   # ...
@@ -800,7 +810,7 @@ req = new_request_module(request_url)
 inventory_tracker('apples', req, 'www.inventory-awesome.io')
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def new_request_module(url)
   # ...
@@ -809,7 +819,7 @@ end
 req = new_request_module(request_url)
 inventory_tracker('apples', req, 'www.inventory-awesome.io')
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## **Objects and Data Structures**
 ### Use getters and setters
@@ -826,7 +836,7 @@ to look up and change every accessor in your codebase.
 server.
 
 
-**Bad:**
+**Mal:**
 ```ruby
 def make_bank_account
   # ...
@@ -842,7 +852,7 @@ account[:balance] = 100
 account[:balance] # => 100
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class BankAccount
   def initialize
@@ -871,7 +881,7 @@ account.balance # => 100
 
 Alternatively, if your getters and setters are absolutely trivial, you should use `attr_accessor` to define them. This is especially convenient for implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers for remote APIs).
 
-**Good:**
+**Bien:**
 ```ruby
 class Toy
   attr_accessor :price
@@ -884,7 +894,7 @@ toy.price # => 50
 
 However, you have to be aware that in some situations, using `attr_accessor` is a code smell, read more [here](https://solnic.codes/2012/04/04/get-rid-of-that-code-smell-attributes).
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 
 ## **Classes**
@@ -906,7 +916,7 @@ more often it comes at some costs:
 For more information you can read the full [blog post](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
 on this topic written by [Marco Pivetta](https://github.com/Ocramius).
 
-**Bad:**
+**Mal:**
 ```ruby
 class Car
   def initialize(make, model, color)
@@ -947,7 +957,7 @@ car = Car.new('Ford','F-150','red')
   .save
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class Car
   attr_accessor :make, :model, :color
@@ -967,7 +977,7 @@ car = Car.new('Ford', 'F-150', 'red')
 car.color = 'pink'
 car.save
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Prefer composition over inheritance
 As stated famously in [*Design Patterns*](https://en.wikipedia.org/wiki/Design_Patterns) by the Gang of Four,
@@ -987,7 +997,7 @@ relationship (Human->Animal vs. User->UserDetails).
 3. You want to make global changes to derived classes by changing a base class.
 (Change the caloric expenditure of all animals when they move).
 
-**Bad:**
+**Mal:**
 ```ruby
 class Employee
   def initialize(name, email)
@@ -1009,7 +1019,7 @@ class EmployeeTaxData < Employee
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class EmployeeTaxData
   def initialize(ssn, salary)
@@ -1032,7 +1042,7 @@ class Employee
   # ...
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## **SOLID**
 ### Single Responsibility Principle (SRP)
@@ -1045,7 +1055,7 @@ It's important because if too much functionality is in one class and you modify
 a piece of it, it can be difficult to understand how that will affect other
 dependent modules in your codebase.
 
-**Bad:**
+**Mal:**
 ```ruby
 class UserSettings
   def initialize(user)
@@ -1063,7 +1073,7 @@ class UserSettings
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class UserAuth
   def initialize(user)
@@ -1087,7 +1097,7 @@ class UserSettings
   end
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Open/Closed Principle (OCP)
 As stated by [Bertrand Meyer](https://en.wikipedia.org/wiki/Bertrand_Meyer), "software entities (classes, modules, functions,
@@ -1097,7 +1107,7 @@ add new functionalities without changing existing code.
 
 In the "bad" example below adding another adapter would require changing `HttpRequester` class. This violates OCP.
 
-**Bad:**
+**Mal:**
 ```ruby
 class AjaxAdapter
   attr_reader :name
@@ -1139,7 +1149,7 @@ class HttpRequester
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class AjaxAdapter
   def request(url)
@@ -1163,7 +1173,7 @@ class HttpRequester
   end
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Liskov Substitution Principle (LSP)
 This is a scary term for a very simple concept. It's formally defined as "If S
@@ -1179,7 +1189,7 @@ classic Square-Rectangle example. Mathematically, a square is a rectangle, but
 if you model it using the "is-a" relationship via inheritance, you quickly
 get into trouble.
 
-**Bad:**
+**Mal:**
 ```ruby
 class Rectangle
   def initialize
@@ -1233,7 +1243,7 @@ rectangles = [Rectangle.new, Rectangle.new, Square.new]
 render_large_rectangles(rectangles)
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class Shape
   def color=(color)
@@ -1276,7 +1286,7 @@ end
 shapes = [Rectangle.new(4, 5), Rectangle.new(4, 5), Square.new(5)]
 render_large_shapes(shapes)
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Interface Segregation Principle (ISP)
 Ruby doesn't have interfaces so this principle doesn't apply as strictly
@@ -1291,7 +1301,7 @@ When a client depends upon a class that contains interfaces that the client does
 
 The following example is taken from [here](http://geekhmer.github.io/blog/2015/03/18/interface-segregation-principle-in-ruby/).
 
-**Bad:**
+**Mal:**
 ```ruby
 class Car
   # used by Driver
@@ -1325,7 +1335,7 @@ end
 
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 # used by Driver only
 class Car
@@ -1359,7 +1369,7 @@ class Mechanic
 end
 ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Dependency Inversion Principle (DIP)
 This principle states two essential things:
@@ -1380,7 +1390,7 @@ and properties that an object/class exposes to another object/class. In the
 example below, the implicit contract is that any Request module for an
 `InventoryTracker` will have a `request_items` method.
 
-**Bad:**
+**Mal:**
 ```ruby
 class InventoryRequester
   def initialize
@@ -1411,7 +1421,7 @@ inventory_tracker = InventoryTracker.new(['apples', 'bananas'])
 inventory_tracker.request_items
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class InventoryTracker
   def initialize(items, requester)
@@ -1451,7 +1461,7 @@ end
 inventory_tracker = InventoryTracker.new(['apples', 'bananas'], InventoryRequesterV2.new)
 inventory_tracker.request_items
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## **Testing**
 Testing is more important than shipping. If you have no tests or an
@@ -1470,7 +1480,7 @@ or refactoring an existing one.
 
 ### Single expectation per test
 
-**Bad:**
+**Mal:**
 ```ruby
 require 'rspec'
 
@@ -1486,7 +1496,7 @@ describe 'Calculator' do
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 require 'rspec'
 
@@ -1510,7 +1520,7 @@ describe 'Calculator' do
   end
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## **Error Handling**
 Thrown errors are a good thing! They mean the runtime has successfully
@@ -1525,7 +1535,7 @@ isn't much better as often times it can get lost in a sea of other logs. If you 
 think an error may occur there and therefore you should have a plan,
 or create a code path, for when it occurs.
 
-**Bad:**
+**Mal:**
 ```ruby
 require 'logger'
 
@@ -1538,7 +1548,7 @@ rescue StandardError => err
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 require 'logger'
 
@@ -1562,7 +1572,7 @@ end
 ### Provide context with exceptions
 Use a descriptive error class name and a message when you raise an error. That way you know why the error occurred and you can rescue the specific type of error.
 
-***Bad:***
+***Mal:***
 ```ruby
 def initialize(user)
   fail unless user
@@ -1570,7 +1580,7 @@ def initialize(user)
 end
 ```
 
-***Good:***
+***Bien:***
 ```ruby
 def initialize(user)
   fail ArgumentError, 'Missing user' unless user
@@ -1578,7 +1588,7 @@ def initialize(user)
 end
 ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 
 ## **Formatting**
@@ -1596,7 +1606,7 @@ Ruby is dynamically typed, so capitalization tells you a lot about your variable
 methods, etc. These rules are subjective, so your team can choose whatever
 they want. The point is, no matter what you all choose, just be consistent.
 
-**Bad:**
+**Mal:**
 ```ruby
 DAYS_IN_WEEK = 7
 daysInMonth = 30
@@ -1612,7 +1622,7 @@ class ANIMAL; end
 class Alpaca; end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 DAYS_IN_WEEK = 7
 DAYS_IN_MONTH = 30
@@ -1627,7 +1637,7 @@ def restore_database; end
 class Animal; end
 class Alpaca; end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 
 ### Method callers and callees should be close
@@ -1635,7 +1645,7 @@ If a method calls another, keep those methods vertically close in the source
 file. Ideally, keep the caller right above the callee. We tend to read code from
 top-to-bottom, like a newspaper. Because of this, make your code read that way.
 
-**Bad:**
+**Mal:**
 ```ruby
 class PerformanceReview
   def initialize(employee)
@@ -1675,7 +1685,7 @@ review = PerformanceReview.new(employee)
 review.perf_review
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 class PerformanceReview
   def initialize(employee)
@@ -1715,7 +1725,7 @@ review = PerformanceReview.new(employee)
 review.perf_review
 ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## **Comments**
 
@@ -1723,7 +1733,7 @@ review.perf_review
 ### Don't leave commented out code in your codebase
 Version control exists for a reason. Leave old code in your history.
 
-**Bad:**
+**Mal:**
 ```ruby
 do_stuff
 # do_other_stuff
@@ -1731,17 +1741,17 @@ do_stuff
 # do_so_much_stuff
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 do_stuff
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ### Don't have journal comments
 Remember, use version control! There's no need for dead code, commented code,
 and especially journal comments. Use `git log` to get history!
 
-**Bad:**
+**Mal:**
 ```ruby
 # 2016-12-20: Removed monads, didn't understand them (RM)
 # 2016-10-01: Improved using special monads (JP)
@@ -1752,13 +1762,13 @@ def combine(a, b)
 end
 ```
 
-**Good:**
+**Bien:**
 ```ruby
 def combine(a, b)
   a + b
 end
 ```
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
 
 ## Translations
 
@@ -1767,4 +1777,4 @@ This is also available in other languages:
   - [Brazilian Portuguese](https://github.com/uohzxela/clean-code-ruby/blob/master/translations/pt-BR.md)
   - [Simplified Chinese](https://github.com/uohzxela/clean-code-ruby/blob/master/translations/zh-CN.md)
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ volver arriba](#tabla-de-contenido)**
